@@ -51,6 +51,9 @@ func (converter *DefaultConverter) convertNonCodeBlockText(ticketID int64, wikiP
 	// - this can upset other regexps which assume everything on a single line
 	out = converter.convertParagraphs(out)
 
+	// custom WFG changes
+	out = converter.convertPhabLinks(out)
+
 	return out
 }
 
