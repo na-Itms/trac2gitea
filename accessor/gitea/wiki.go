@@ -214,6 +214,13 @@ func (accessor *DefaultAccessor) TranslateWikiPageName(pageName string) string {
 		return "Home"
 	}
 
+	// WFG: Make a couple of our wiki page names nicer. In particular, colons must
+	// be removed as not to break links
+	pageName = strings.ReplaceAll(pageName, "/", "_")
+	pageName = strings.ReplaceAll(pageName, ":_", "_")
+	pageName = strings.ReplaceAll(pageName, ":", "_")
+	pageName = strings.ReplaceAll(pageName, "_-_", "-")
+
 	return pageName
 }
 
