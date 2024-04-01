@@ -64,6 +64,8 @@ func (importer *Importer) importTicketChange(
 		issueCommentID, err = importer.importMilestoneIssueComment(issueID, change, userMap)
 	case trac.TicketOwnerChange:
 		issueCommentID, err = importer.importOwnershipIssueComment(issueID, change, userMap)
+	case trac.TicketPatchChange:
+		issueCommentID, err = importer.importPatchChangeIssueComment(issueID, change, userMap)
 	case trac.TicketPriorityChange:
 		issueCommentID, err = importer.importLabelChangeIssueComment(issueID, change, userMap, priorityMap)
 	case trac.TicketResolutionChange:

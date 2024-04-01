@@ -55,6 +55,19 @@ func sqlForFirstChangeToEachField(fields []TicketChangeType) string {
 func sqlForTicketTableField(fieldIndex int, field TicketChangeType) string {
 	table := fmt.Sprintf("t%d", fieldIndex)
 	strField := string(field)
+
+	if field == TicketPatchChange {
+		return `
+			SELECT 2 source,
+				'` + strField + `' field,
+				COALESCE(` + table + `.value, '') value,
+				0 time
+			FROM ticket_custom ` + table + `
+			WHERE ticket=$1
+			AND name='` + strField + `'
+			`
+	}
+
 	return `
 		SELECT 2 source,
 			'` + strField + `' field,
@@ -71,6 +84,7 @@ var initialTicketChangeFields = []TicketChangeType{
 	TicketComponentChange, TicketPriorityChange, TicketResolutionChange,
 	TicketSeverityChange, TicketTypeChange, TicketVersionChange,
 	TicketMilestoneChange, TicketOwnerChange,
+	TicketPatchChange,
 }
 
 // getInitialTicketChanges generates a set of "synthetic" changes on a Trac ticket to model the assignments of its initial values
@@ -165,6 +179,7 @@ var recordedTicketChangeFields = []TicketChangeType{
 	TicketComponentChange, TicketPriorityChange, TicketResolutionChange,
 	TicketSeverityChange, TicketTypeChange, TicketVersionChange,
 	TicketMilestoneChange, TicketOwnerChange, TicketStatusChange, TicketSummaryChange,
+	TicketPatchChange,
 }
 
 // getRecordedTicketChanges retrieves all changes on a given ticket recorded by Trac in ascending time order,

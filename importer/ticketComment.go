@@ -27,3 +27,28 @@ func (importer *Importer) importCommentIssueComment(issueID int64, change *trac.
 
 	return issueCommentID, nil
 }
+
+// --- WFG
+// importPatchChangeIssueComment imports a Trac ticket patch change into Gitea, as a formatted comment
+// it returns id of created Gitea issue comment or NullID if cannot create comment
+func (importer *Importer) importPatchChangeIssueComment(issueID int64, change *trac.TicketChange, userMap map[string]string) (int64, error) {
+	issueComment, err := importer.createIssueComment(issueID, change, userMap)
+	if err != nil {
+		return gitea.NullID, err
+	}
+
+	issueComment.CommentType = gitea.CommentIssueCommentType
+
+	if change.NewValue != "" {
+		issueComment.Text = "**Patch set to:** " + importer.markdownConverter.TicketConvert(change.TicketID, change.NewValue)
+	} else {
+		issueComment.Text = "**Patch removed.**"
+	}
+
+	issueCommentID, err := importer.giteaAccessor.AddIssueComment(issueID, issueComment)
+	if err != nil {
+		return gitea.NullID, err
+	}
+
+	return issueCommentID, nil
+}

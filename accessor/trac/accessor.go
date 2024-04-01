@@ -61,6 +61,10 @@ const (
 	// TicketOwnerChange denotes a ticket ownership change.
 	TicketOwnerChange TicketChangeType = "owner"
 
+	// WFG - TicketPatchChange denotes a ticket patch change.
+	// This is a custom field pointing to a Phabricator differential revision.
+	TicketPatchChange TicketChangeType = "phab_field"
+
 	// TicketPriorityChange denotes a ticket resolution change.
 	TicketPriorityChange TicketChangeType = "priority"
 
